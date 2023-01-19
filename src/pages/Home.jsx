@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid'
 import { Post } from '../components/Post'
 import { TagsBlock } from '../components/TagsBlock'
 import { CommentsBlock } from '../components/CommentsBlock'
-import { fetchPosts } from '../redux/slices/posts'
+import { fetchPosts, fetchTags } from '../redux/slices/posts'
 
 export const Home = () => {
 	const dispatch = useDispatch()
@@ -16,6 +16,7 @@ export const Home = () => {
 
 	React.useEffect(() => {
 		dispatch(fetchPosts())
+		dispatch(fetchTags())
 	}, [])
 
 	return (
@@ -49,10 +50,7 @@ export const Home = () => {
 					)}
 				</Grid>
 				<Grid xs={4} item>
-					<TagsBlock
-						items={['react', 'typescript', 'заметки']}
-						isLoading={false}
-					/>
+					<TagsBlock items={tags.items} isLoading={false} />
 					<CommentsBlock
 						items={[
 							{
