@@ -25,6 +25,7 @@ export const Post = ({
 	isLoading,
 	isEditable,
 }) => {
+	console.log(viewsCount)
 	if (isLoading) {
 		return <PostSkeleton />
 	}

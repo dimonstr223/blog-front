@@ -42,7 +42,7 @@ export const Home = () => {
 								imageUrl={obj.imageUrl}
 								user={obj.user}
 								createdAt={obj.createdAt}
-								viewsCount={obj.viewsCount}
+								viewsCount={obj.viewCount}
 								commentsCount={3}
 								tags={obj.tags}
 								isEditable
