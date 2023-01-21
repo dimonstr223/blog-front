@@ -5,19 +5,19 @@ import Button from '@mui/material/Button'
 import SimpleMDE from 'react-simplemde-editor'
 
 import 'easymde/dist/easymde.min.css'
-import styles from './AddPost.module.scss'
 import { Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectIsAuth } from '../../redux/slices/auth'
 import axios from '../../axios'
+import styles from './AddPost.module.scss'
 
 export const AddPost = () => {
 	const isAuth = useSelector(selectIsAuth)
 
-	const imageUrl = ''
 	const [value, setValue] = React.useState('')
 	const [title, setTitle] = React.useState('')
 	const [tags, setTags] = React.useState('')
+	const [imageUrl, setImageUrl] = React.useState('')
 	const inputFileRef = React.useRef(null)
 
 	const handleChangeFile = async event => {
@@ -25,8 +25,8 @@ export const AddPost = () => {
 			const formData = new FormData()
 			const file = event.target.files[0]
 			formData.append('image', file)
-
 			const { data } = await axios.post('/upload', formData)
+			setImageUrl(data.url)
 			console.log(data)
 		} catch (err) {
 			console.warn(err)
@@ -75,16 +75,21 @@ export const AddPost = () => {
 				hidden
 			/>
 			{imageUrl && (
-				<Button variant='contained' color='error' onClick={onClickRemoveImage}>
-					Удалить
-				</Button>
-			)}
-			{imageUrl && (
-				<img
-					className={styles.image}
-					src={`http://localhost:4444${imageUrl}`}
-					alt='Uploaded'
-				/>
+				<>
+					<Button
+						variant='contained'
+						color='error'
+						onClick={onClickRemoveImage}
+					>
+						Удалить
+					</Button>
+					<img
+						className={styles.image}
+						width={150}
+						src={`http://localhost:4444/${imageUrl}`}
+						alt='Uploaded'
+					/>
+				</>
 			)}
 			<br />
 			<br />
