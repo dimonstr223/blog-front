@@ -9,6 +9,7 @@ import styles from './AddPost.module.scss'
 import { Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectIsAuth } from '../../redux/slices/auth'
+import axios from '../../axios'
 
 export const AddPost = () => {
 	const isAuth = useSelector(selectIsAuth)
@@ -17,8 +18,21 @@ export const AddPost = () => {
 	const [value, setValue] = React.useState('')
 	const [title, setTitle] = React.useState('')
 	const [tags, setTags] = React.useState('')
+	const inputFileRef = React.useRef(null)
 
-	const handleChangeFile = () => {}
+	const handleChangeFile = async event => {
+		try {
+			const formData = new FormData()
+			const file = event.target.files[0]
+			formData.append('image', file)
+
+			const { data } = await axios.post('/upload', formData)
+			console.log(data)
+		} catch (err) {
+			console.warn(err)
+			alert('Uploading error')
+		}
+	}
 
 	const onClickRemoveImage = () => {}
 
@@ -47,10 +61,19 @@ export const AddPost = () => {
 
 	return (
 		<Paper style={{ padding: 30 }}>
-			<Button variant='outlined' size='large'>
+			<Button
+				onClick={() => inputFileRef.current.click()}
+				variant='outlined'
+				size='large'
+			>
 				Загрузить превью
 			</Button>
-			<input type='file' onChange={handleChangeFile} hidden />
+			<input
+				ref={inputFileRef}
+				type='file'
+				onChange={handleChangeFile}
+				hidden
+			/>
 			{imageUrl && (
 				<Button variant='contained' color='error' onClick={onClickRemoveImage}>
 					Удалить
