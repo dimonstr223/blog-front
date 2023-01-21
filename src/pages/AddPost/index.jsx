@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import SimpleMDE from 'react-simplemde-editor'
 
 import 'easymde/dist/easymde.min.css'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectIsAuth } from '../../redux/slices/auth'
 import axios from '../../axios'
@@ -14,7 +14,10 @@ import styles from './AddPost.module.scss'
 export const AddPost = () => {
 	const isAuth = useSelector(selectIsAuth)
 
-	const [value, setValue] = React.useState('')
+	const navigate = useNavigate()
+
+	const [isLoading, setIsLoading] = React.useState(false)
+	const [text, setText] = React.useState('')
 	const [title, setTitle] = React.useState('')
 	const [tags, setTags] = React.useState('')
 	const [imageUrl, setImageUrl] = React.useState('')
@@ -39,8 +42,28 @@ export const AddPost = () => {
 	}
 
 	const onChange = React.useCallback(value => {
-		setValue(value)
+		setText(value)
 	}, [])
+
+	const onSubmit = async () => {
+		try {
+			setIsLoading(true)
+
+			const fields = {
+				title,
+				tags,
+				text,
+				imageUrl,
+			}
+
+			const { data } = await axios.post('/posts', fields)
+			const id = data._id
+			navigate(`/posts/${id}`)
+		} catch (err) {
+			console.warn(err)
+			alert('Post creating error')
+		}
+	}
 
 	const options = React.useMemo(
 		() => ({
@@ -113,12 +136,12 @@ export const AddPost = () => {
 			/>
 			<SimpleMDE
 				className={styles.editor}
-				value={value}
+				value={text}
 				onChange={onChange}
 				options={options}
 			/>
 			<div className={styles.buttons}>
-				<Button size='large' variant='contained'>
+				<Button onClick={onSubmit} size='large' variant='contained'>
 					Опубликовать
 				</Button>
 				<a href='/'>
