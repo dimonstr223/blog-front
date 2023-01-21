@@ -15,6 +15,8 @@ export const AddPost = () => {
 
 	const imageUrl = ''
 	const [value, setValue] = React.useState('')
+	const [title, setTitle] = React.useState('')
+	const [tags, setTags] = React.useState('')
 
 	const handleChangeFile = () => {}
 
@@ -39,7 +41,7 @@ export const AddPost = () => {
 		[]
 	)
 
-	if (!isAuth) {
+	if (!window.localStorage.getItem('token') && !isAuth) {
 		return <Navigate to='/' />
 	}
 
@@ -68,12 +70,16 @@ export const AddPost = () => {
 				variant='standard'
 				placeholder='Заголовок статьи...'
 				fullWidth
+				value={title}
+				onChange={e => setTitle(e.target.value)}
 			/>
 			<TextField
 				classes={{ root: styles.tags }}
 				variant='standard'
 				placeholder='Тэги'
 				fullWidth
+				value={tags}
+				onChange={e => setTags(e.target.value)}
 			/>
 			<SimpleMDE
 				className={styles.editor}
