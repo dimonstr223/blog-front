@@ -38,8 +38,6 @@ export const Login = () => {
 		}
 	}
 
-	React.useEffect(() => {}, [])
-
 	if (isAuth) {
 		return <Navigate to='/' />
 	}
