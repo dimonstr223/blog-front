@@ -71,7 +71,13 @@ export const Registration = () => {
 					{...register('password', { required: 'Enter password' })}
 					fullWidth
 				/>
-				<Button type='submit' size='large' variant='contained' fullWidth>
+				<Button
+					disabled={!isValid}
+					type='submit'
+					size='large'
+					variant='contained'
+					fullWidth
+				>
 					Зарегистрироваться
 				</Button>
 			</form>
